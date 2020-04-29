@@ -182,7 +182,7 @@ public class MainFragment extends Fragment
             public void onClick(View v)
             {
 //                AngleValue = Math.max(AngleValue-5,35);
-                MainFragment.getInstance().setAngleValue(Math.max(MainFragment.getInstance().getAngleValue()-5,35));
+                MainFragment.getInstance().setAngleValue(Math.min(MainFragment.getInstance().getAngleValue()+5,145));
             }
         });
 
@@ -192,7 +192,8 @@ public class MainFragment extends Fragment
             public void onClick(View v)
             {
 //                AngleValue = Math.min(AngleValue + 5 , 145);
-                MainFragment.getInstance().setAngleValue(Math.min(MainFragment.getInstance().getAngleValue()+5,145));
+
+                MainFragment.getInstance().setAngleValue(Math.max(MainFragment.getInstance().getAngleValue()-5,35));
             }
         });
 
@@ -478,7 +479,7 @@ public class MainFragment extends Fragment
             MainFragment.getInstance().getMAngleValue().setText(Integer.toString(MainFragment.getInstance().getAngleValue()));
             MainFragment.getInstance().getMSpeedValue().setText(Integer.toString(MainFragment.getInstance().getSpeedValue()));
 //            MessageToSend = "#" + SticksMessageHeader + Integer.toString(MainFragment.getInstance().getSpeedValue()) + "," + Integer.toString(MainFragment.getInstance().getAngleValue()) + "~\r\n";
-            String MessageBody = "#" + Integer.toString(MainFragment.getInstance().getSpeedValue()) + "," + Integer.toString(MainFragment.getInstance().getAngleValue()) + "~";
+            String MessageBody = "#" + Integer.toString(MainFragment.getInstance().getSpeedValue()) + "," + Integer.toString(MainFragment.getInstance().getAngleValue()) + "!~";
             MainFragment.getInstance().setMessageCounter(MainFragment.getInstance().getMessageCounter()+1);
             MessageToSend = SticksMessageHeader + MessageBody.length() + "," + MainFragment.getInstance().getMessageCounter() + "," + MessageBody;
             if ( !(MainFragment.getInstance().isSocketOpened()) )
