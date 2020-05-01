@@ -45,7 +45,7 @@ import lombok.SneakyThrows;
 @Setter
 public class MainFragment extends Fragment
 {
-    private String VersionID = "1.03";
+    private String VersionID = "1.04";
 
     private MainViewModel mViewModel;
     private Button mPairedDevicesButton;
