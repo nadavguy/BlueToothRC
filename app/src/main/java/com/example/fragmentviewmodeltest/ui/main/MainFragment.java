@@ -5,7 +5,10 @@ import androidx.lifecycle.ViewModelProviders;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.hardware.SensorManager;
 import android.os.Bundle;
+import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,12 +26,12 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fragmentviewmodeltest.MainActivity;
 import com.example.fragmentviewmodeltest.R;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.PipedOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Set;
 import java.util.UUID;
@@ -56,6 +59,8 @@ public class MainFragment extends Fragment
     private TextView mSpeedValue;
     private TextView mAngleValue;
     private TextView mMessage;
+    private TextView mVersionID;
+    private String VersionID = "1.01";
 
 
     private int SpeedValue = 0;
@@ -72,6 +77,12 @@ public class MainFragment extends Fragment
     private Handler MonitorControlshandler;
     private Handler MonitorBThandler;
     private ConnectedThread mConnectedThread; // bluetooth background worker thread to send and receive data
+
+    private TextView mRoll;
+    private TextView mPitch;
+    private Handler UpdateDisplayHandler;
+
+
 
     // #defines for identifying shared types between calling functions
     private final static int REQUEST_ENABLE_BT = 1; // used to identify adding bluetooth names
@@ -90,18 +101,22 @@ public class MainFragment extends Fragment
     private static MainFragment outInstance = new MainFragment();
     public static MainFragment getInstance() { return  outInstance;}
 
+    private SensorManager sensorManager;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState)
     {
-        View root = inflater.inflate(R.layout.main_fragment, container, false);
 
+        View root = inflater.inflate(R.layout.main_fragment, container, false);
 //        Declare UI components
         mPairedDevicesButton = (Button) root.findViewById(R.id.PairedDevicesButton);
         mDeviceListView = root.findViewById(R.id.DevicesListView);
         mBluetoothStatus = root.findViewById(R.id.BTTextView);
-        mSendButton = root.findViewById(R.id.SendButton);
+
+        mRoll = root.findViewById(R.id.RollValuetextView);
+        mPitch = root.findViewById(R.id.PitchValuetextView);
 
         mFasterButton = root.findViewById(R.id.IncreaseSpeedButton);
         mSlowerButton = root.findViewById(R.id.DecreaseSpeedButton);
@@ -118,10 +133,9 @@ public class MainFragment extends Fragment
         MainFragment.getInstance().setSocketOpened(false);
 
         MainFragment.getInstance().setMDeviceListView((ListView) root.findViewById(R.id.DevicesListView));
-
-//dsfsfsfdsfsf
-
-
+        mVersionID = root.findViewById(R.id.VersionTextView);
+        mVersionID.setText(VersionID);
+//        ((TextView)root.findViewById(R.id.VersionTextView)).setTe
 
 //        Declare Adaptors
         mBTArrayAdapter = new ArrayAdapter<String>(getContext(), android.R.layout.simple_list_item_1);
@@ -142,16 +156,6 @@ public class MainFragment extends Fragment
             public void onClick(View v)
             {
                 listPairedDevices(v);
-            }
-        });
-
-        mSendButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-//                mConnectedThread.write("aaa\r\n");
-//                MainFragment.getInstance().getMConnectedThread().write("aaa\r\n");
             }
         });
 
@@ -251,6 +255,9 @@ public class MainFragment extends Fragment
 
         MonitorControlshandler = new Handler();
         MonitorControlshandler.post(runnableCode);
+
+        UpdateDisplayHandler = new Handler();
+        UpdateDisplayHandler.post(DisplayRender);
         return root;
     }
 
@@ -333,7 +340,7 @@ public class MainFragment extends Fragment
                         catch (IOException e2)
                         {
                             //insert code to deal with this
-                            Toast.makeText(getContext(), "Socket creation failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Socket closing failed", Toast.LENGTH_SHORT).show();
                         }
                     }
                     if (fail == false)
@@ -574,6 +581,19 @@ public class MainFragment extends Fragment
             {
                 int a = 1;
             }
+        }
+    };
+
+
+    private Runnable DisplayRender = new Runnable()
+    {
+        @Override
+        public void run()
+        {
+            mPitch.setText(Float.toString(MainActivity.getInstance().getPitch()*360/(float)(2*Math.PI)));
+            mRoll.setText(Float.toString(MainActivity.getInstance().getRoll()*360/(float)(2*Math.PI)));
+            UpdateDisplayHandler.postDelayed(this,20);
+
         }
     };
 //Thread Creation example

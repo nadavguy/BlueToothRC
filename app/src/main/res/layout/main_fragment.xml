@@ -31,8 +31,8 @@
 
     <ListView
         android:id="@+id/DevicesListView"
-        android:layout_width="375dp"
-        android:layout_height="101dp"
+        android:layout_width="294dp"
+        android:layout_height="139dp"
         android:layout_marginStart="124dp"
         android:layout_marginTop="24dp"
         android:visibility="invisible"
@@ -50,21 +50,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/SendButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="492dp"
-        android:layout_marginTop="224dp"
-        android:orientation="horizontal"
-        android:text="Send"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
         android:id="@+id/IncreaseSpeedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="45dp"
         android:text="Faster"
         app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +63,7 @@
         android:id="@+id/DecreaseSpeedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:text="Slower"
         app:layout_constraintStart_toStartOf="parent"
@@ -84,7 +73,7 @@
         android:id="@+id/LeftButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="180dp"
         android:layout_marginEnd="120dp"
         android:text="Left"
         app:layout_constraintEnd_toStartOf="@+id/RightButton"
@@ -94,8 +83,8 @@
         android:id="@+id/RightButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
-        android:layout_marginEnd="52dp"
+        android:layout_marginTop="180dp"
+        android:layout_marginEnd="16dp"
         android:text="Right"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -104,7 +93,7 @@
         android:id="@+id/CenterButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="180dp"
         android:layout_marginEnd="16dp"
         android:text="Center"
         app:layout_constraintEnd_toStartOf="@+id/RightButton"
@@ -114,18 +103,28 @@
         android:id="@+id/StopButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:text="Stop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/DecreaseSpeedButton" />
 
     <TextView
+        android:id="@+id/SpeedTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="20dp"
+        android:text="Speed:"
+        app:layout_constraintEnd_toStartOf="@+id/SpeedValueTextView"
+        app:layout_constraintTop_toBottomOf="@+id/AngleTitle" />
+
+    <TextView
         android:id="@+id/AngleTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="27dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="24dp"
         android:text="Angle:"
         app:layout_constraintEnd_toStartOf="@+id/AngleValueTextView"
         app:layout_constraintTop_toTopOf="parent" />
@@ -134,30 +133,69 @@
         android:id="@+id/AngleValueTextView"
         android:layout_width="35dp"
         android:layout_height="19dp"
-        android:layout_marginTop="27dp"
-        android:layout_marginEnd="100dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginEnd="196dp"
         android:text="90"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/SpeedTitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="23dp"
-        android:layout_marginEnd="17dp"
-        android:text="Speed:"
-        app:layout_constraintEnd_toStartOf="@+id/SpeedValueTextView"
-        app:layout_constraintTop_toBottomOf="@+id/AngleTitle" />
-
-    <TextView
         android:id="@+id/SpeedValueTextView"
         android:layout_width="28dp"
         android:layout_height="21dp"
-        android:layout_marginTop="23dp"
-        android:layout_marginEnd="106dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginEnd="204dp"
         android:text="0"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AngleValueTextView" />
+
+    <TextView
+        android:id="@+id/VersionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/PtextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="168dp"
+        android:layout_marginTop="24dp"
+        android:text="Pitch:"
+        app:layout_constraintStart_toEndOf="@+id/DevicesListView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/RtextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="168dp"
+        android:layout_marginTop="6dp"
+        android:text="Roll:"
+        app:layout_constraintStart_toEndOf="@+id/DevicesListView"
+        app:layout_constraintTop_toBottomOf="@+id/PtextView" />
+
+    <TextView
+        android:id="@+id/PitchValuetextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="24dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/PtextView"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/RollValuetextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="45dp"
+        android:layout_marginTop="6dp"
+        android:text="TextView"
+        app:layout_constraintStart_toStartOf="@+id/RtextView"
+        app:layout_constraintTop_toBottomOf="@+id/PitchValuetextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
