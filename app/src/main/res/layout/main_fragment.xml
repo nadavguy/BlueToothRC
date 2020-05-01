@@ -13,11 +13,7 @@
         android:layout_height="wrap_content"
         android:text="MainFragment"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.99"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintStart_toStartOf="@+id/Manualswitch" />
 
     <Button
         android:id="@+id/PairedDevicesButton"
@@ -197,5 +193,18 @@
         android:text="TextView"
         app:layout_constraintStart_toStartOf="@+id/RtextView"
         app:layout_constraintTop_toBottomOf="@+id/PitchValuetextView" />
+
+    <Switch
+        android:id="@+id/Manualswitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="18dp"
+        android:layout_marginBottom="18dp"
+        android:checked="true"
+        android:showText="true"
+        android:text="Manual: "
+        app:layout_constraintBottom_toTopOf="@+id/messageTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:checked="true" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

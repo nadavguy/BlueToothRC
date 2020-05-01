@@ -22,7 +22,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +45,7 @@ import lombok.SneakyThrows;
 @Setter
 public class MainFragment extends Fragment
 {
+    private String VersionID = "1.02";
 
     private MainViewModel mViewModel;
     private Button mPairedDevicesButton;
@@ -60,12 +63,15 @@ public class MainFragment extends Fragment
     private TextView mAngleValue;
     private TextView mMessage;
     private TextView mVersionID;
-    private String VersionID = "1.01";
+    private Switch mManualSwitch;
+
 
 
     private int SpeedValue = 0;
     private int AngleValue = 90;
     private int MessageCounter = 0;
+    private int OrientationModeSpeedValue = 0;
+    private int OrientationModeAngleValue = 90;
 
     private boolean SocketOpened = false;
 
@@ -81,6 +87,8 @@ public class MainFragment extends Fragment
     private TextView mRoll;
     private TextView mPitch;
     private Handler UpdateDisplayHandler;
+
+    private boolean IsManualMode = true;
 
 
 
@@ -124,6 +132,7 @@ public class MainFragment extends Fragment
         mRightButton = root.findViewById(R.id.RightButton);
         mStopButton = root.findViewById(R.id.StopButton);
         mCenterButton = root.findViewById(R.id.CenterButton);
+        mManualSwitch = root.findViewById(R.id.Manualswitch);
 
         mSpeedValue = root.findViewById(R.id.SpeedValueTextView);
         mAngleValue = root.findViewById(R.id.AngleValueTextView);
@@ -217,6 +226,46 @@ public class MainFragment extends Fragment
             {
 //                AngleValue = 90;
                 MainFragment.getInstance().setAngleValue(90);
+            }
+        });
+
+//        mManualSwitch.setOnCheckedChangeListener(new View.OnClickListener()
+//        {
+//            @Override
+//            public void onClick(View v)
+//            {
+//                //SpeedValue = Math.min(SpeedValue+5,100);
+//                MainFragment.getInstance().setSpeedValue(Math.min(MainFragment.getInstance().getSpeedValue()+5,100));
+//
+//            }
+//        });
+
+        mManualSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // do something, the isChecked will be
+                // true if the switch is in the On position
+                if (isChecked)
+                {
+                    System.out.println("On");
+                    IsManualMode = true;
+                    mSlowerButton.setEnabled(true);
+                    mStopButton.setEnabled(true);
+                    mFasterButton.setEnabled(true);
+                    mLeftButton.setEnabled(true);
+                    mCenterButton.setEnabled(true);
+                    mRightButton.setEnabled(true);
+                }
+                else
+                {
+                    System.out.println("Off");
+                    IsManualMode = false;
+                    mSlowerButton.setEnabled(false);
+                    mStopButton.setEnabled(false);
+                    mFasterButton.setEnabled(false);
+                    mLeftButton.setEnabled(false);
+                    mCenterButton.setEnabled(false);
+                    mRightButton.setEnabled(false);
+                }
             }
         });
 
@@ -483,8 +532,11 @@ public class MainFragment extends Fragment
         @Override
         public void run() {
             // Do something here on the main thread
-            MainFragment.getInstance().getMAngleValue().setText(Integer.toString(MainFragment.getInstance().getAngleValue()));
-            MainFragment.getInstance().getMSpeedValue().setText(Integer.toString(MainFragment.getInstance().getSpeedValue()));
+            if (IsManualMode)
+            {
+                MainFragment.getInstance().getMAngleValue().setText(Integer.toString(MainFragment.getInstance().getAngleValue()));
+                MainFragment.getInstance().getMSpeedValue().setText(Integer.toString(MainFragment.getInstance().getSpeedValue()));
+            }
 //            MessageToSend = "#" + SticksMessageHeader + Integer.toString(MainFragment.getInstance().getSpeedValue()) + "," + Integer.toString(MainFragment.getInstance().getAngleValue()) + "~\r\n";
             String MessageBody = "#" + Integer.toString(MainFragment.getInstance().getSpeedValue()) + "," + Integer.toString(MainFragment.getInstance().getAngleValue()) + "!~";
             MainFragment.getInstance().setMessageCounter(MainFragment.getInstance().getMessageCounter()+1);
@@ -592,6 +644,13 @@ public class MainFragment extends Fragment
         {
             mPitch.setText(Float.toString(MainActivity.getInstance().getPitch()*360/(float)(2*Math.PI)));
             mRoll.setText(Float.toString(MainActivity.getInstance().getRoll()*360/(float)(2*Math.PI)));
+            OrientationModeAngleValue = Math.min( Math.max(90 + (int) (MainActivity.getInstance().getPitch()*360/(float)(2*Math.PI)), 45),135) ;
+            OrientationModeSpeedValue = Math.min( Math.max(0,55 + (int) (MainActivity.getInstance().getRoll()*360/(float)(2*Math.PI))) * 3 , 100);
+            if (!IsManualMode)
+            {
+                MainFragment.getInstance().getMSpeedValue().setText(Integer.toString(OrientationModeSpeedValue));
+                MainFragment.getInstance().getMAngleValue().setText(Integer.toString(OrientationModeAngleValue) );
+            }
             UpdateDisplayHandler.postDelayed(this,20);
 
         }
