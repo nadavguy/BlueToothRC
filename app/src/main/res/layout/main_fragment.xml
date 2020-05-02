@@ -225,7 +225,9 @@
         android:layout_marginStart="138dp"
         android:layout_marginTop="91dp"
         android:src="@android:drawable/ic_menu_directions"
+        android:visibility="invisible"
         app:layout_constraintStart_toEndOf="@+id/StopButton"
-        app:layout_constraintTop_toBottomOf="@+id/DevicesListView" />
+        app:layout_constraintTop_toBottomOf="@+id/DevicesListView"
+        tools:visibility="invisible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
