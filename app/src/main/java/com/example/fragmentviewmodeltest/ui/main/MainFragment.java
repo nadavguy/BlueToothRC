@@ -6,6 +6,10 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,7 +27,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +51,7 @@ import lombok.SneakyThrows;
 @Setter
 public class MainFragment extends Fragment
 {
-    private String VersionID = "1.04";
+    private String VersionID = "1.06";
 
     private MainViewModel mViewModel;
     private Button mPairedDevicesButton;
@@ -89,6 +95,8 @@ public class MainFragment extends Fragment
     private Handler UpdateDisplayHandler;
 
     private boolean IsManualMode = true;
+    private RelativeLayout relativeLayout;
+    private ImageView TIM;
 
 
 
@@ -133,6 +141,16 @@ public class MainFragment extends Fragment
         mStopButton = root.findViewById(R.id.StopButton);
         mCenterButton = root.findViewById(R.id.CenterButton);
         mManualSwitch = root.findViewById(R.id.Manualswitch);
+
+        //Example for Direct drawing on the display
+//        relativeLayout = (RelativeLayout) root.findViewById(R.id.RLayout);
+//        relativeLayout.addView(new Rectangle(getActivity()));
+//        MainFragment.getInstance().setRelativeLayout(relativeLayout);
+
+        //Example on how to color an ImageView
+//        TIM = root.findViewById(R.id.TestimageView);
+//        TIM.setColorFilter(Color.BLUE);
+
 
         mSpeedValue = root.findViewById(R.id.SpeedValueTextView);
         mAngleValue = root.findViewById(R.id.AngleValueTextView);
@@ -246,6 +264,8 @@ public class MainFragment extends Fragment
                 // true if the switch is in the On position
                 if (isChecked)
                 {
+                    MainFragment.getInstance().setAngleValue(90);
+                    MainFragment.getInstance().setSpeedValue(0);
                     System.out.println("On");
                     IsManualMode = true;
                     mSlowerButton.setEnabled(true);
@@ -646,15 +666,40 @@ public class MainFragment extends Fragment
             mRoll.setText(Float.toString(MainActivity.getInstance().getRoll()*360/(float)(2*Math.PI)));
             OrientationModeAngleValue = Math.min( Math.max(90 + (int) (MainActivity.getInstance().getPitch()*360/(float)(2*Math.PI)), 45),135) ;
             OrientationModeSpeedValue = Math.min( Math.max(0,55 + (int) (MainActivity.getInstance().getRoll()*360/(float)(2*Math.PI))) * 3 , 100);
+            MainFragment.getInstance().setOrientationModeSpeedValue(OrientationModeSpeedValue);
             if (!IsManualMode)
             {
                 MainFragment.getInstance().getMSpeedValue().setText(Integer.toString(OrientationModeSpeedValue));
                 MainFragment.getInstance().getMAngleValue().setText(Integer.toString(OrientationModeAngleValue) );
+                MainFragment.getInstance().setAngleValue(OrientationModeAngleValue);
+                MainFragment.getInstance().setSpeedValue(OrientationModeSpeedValue);
             }
             UpdateDisplayHandler.postDelayed(this,20);
 
         }
     };
+
+    private class Rectangle extends View
+    {
+        Paint paint = new Paint();
+
+        public Rectangle(Context context)
+        {
+            super(context);
+        }
+
+        @Override
+        public void onDraw(Canvas canvas)
+        {
+            super.onDraw(canvas);
+            paint.setColor(Color.GREEN);
+            int A = MainFragment.getInstance().getOrientationModeSpeedValue();
+            Rect rect = new Rect(20, 56, 20+A, 112);
+            canvas.drawRect(rect, paint);
+            //TODO: Move to Runnable
+            invalidate();
+        }
+    }
 //Thread Creation example
     //https://developer.android.com/reference/java/lang/Thread
 //    class PrimeThread extends Thread {

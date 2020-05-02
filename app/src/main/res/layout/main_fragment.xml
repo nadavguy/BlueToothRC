@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:text="Slower"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/IncreaseSpeedButton" />
@@ -100,7 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:text="Stop"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/DecreaseSpeedButton" />
@@ -206,5 +206,26 @@
         app:layout_constraintBottom_toTopOf="@+id/messageTextView"
         app:layout_constraintEnd_toEndOf="parent"
         tools:checked="true" />
+
+    <RelativeLayout
+        android:id="@+id/RLayout"
+        android:layout_width="33dp"
+        android:layout_height="41dp"
+        android:layout_marginStart="144dp"
+        android:layout_marginBottom="12dp"
+        app:layout_constraintBottom_toTopOf="@+id/Manualswitch"
+        app:layout_constraintStart_toEndOf="@+id/DecreaseSpeedButton">
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/TestimageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="138dp"
+        android:layout_marginTop="91dp"
+        android:src="@android:drawable/ic_menu_directions"
+        app:layout_constraintStart_toEndOf="@+id/StopButton"
+        app:layout_constraintTop_toBottomOf="@+id/DevicesListView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
