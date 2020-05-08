@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
+import android.content.res.XmlResourceParser;
 import android.hardware.SensorManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -11,6 +13,7 @@ import android.hardware.SensorEventListener;
 import android.os.Bundle;
 import android.view.WindowManager;
 
+import java.io.InputStream;
 import java.util.*;
 
 import com.example.fragmentviewmodeltest.ui.main.MainFragment;
@@ -58,6 +61,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mMag = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         sensorManager.registerListener(this, mAcc, SensorManager.SENSOR_DELAY_GAME);
         sensorManager.registerListener(this, mMag, SensorManager.SENSOR_DELAY_GAME);
+
+
     }
 
 

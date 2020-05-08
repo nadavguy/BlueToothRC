@@ -27,8 +27,8 @@
 
     <ListView
         android:id="@+id/DevicesListView"
-        android:layout_width="294dp"
-        android:layout_height="139dp"
+        android:layout_width="283dp"
+        android:layout_height="91dp"
         android:layout_marginStart="124dp"
         android:layout_marginTop="24dp"
         android:visibility="invisible"
@@ -229,5 +229,69 @@
         app:layout_constraintStart_toEndOf="@+id/StopButton"
         app:layout_constraintTop_toBottomOf="@+id/DevicesListView"
         tools:visibility="invisible" />
+
+    <ImageView
+        android:id="@+id/TrimUpImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="135dp"
+        android:clickable="true"
+        android:src="@android:drawable/arrow_up_float"
+        app:layout_constraintStart_toEndOf="@+id/IncreaseSpeedButton"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/TrimDownImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="120dp"
+        android:clickable="true"
+        android:src="@android:drawable/arrow_down_float"
+        app:layout_constraintStart_toEndOf="@+id/StopButton"
+        app:layout_constraintTop_toBottomOf="@+id/TrimUpImageView" />
+
+    <TextView
+        android:id="@+id/SpeedTrimTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="48dp"
+        android:text="0"
+        app:layout_constraintStart_toEndOf="@+id/DecreaseSpeedButton"
+        app:layout_constraintTop_toBottomOf="@+id/TrimUpImageView" />
+
+    <ImageView
+        android:id="@+id/RightTrimImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="55dp"
+        android:layout_marginBottom="15dp"
+        android:rotation="90"
+        android:src="@android:drawable/arrow_up_float"
+        app:layout_constraintBottom_toTopOf="@+id/RightButton"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <ImageView
+        android:id="@+id/LeftTrimImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="185dp"
+        android:layout_marginBottom="15dp"
+        android:rotation="270"
+        android:src="@android:drawable/arrow_up_float"
+        app:layout_constraintBottom_toTopOf="@+id/LeftButton"
+        app:layout_constraintEnd_toStartOf="@+id/RightTrimImageView" />
+
+    <TextView
+        android:id="@+id/AngleTrimTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="85dp"
+        android:layout_marginBottom="13dp"
+        android:text="0"
+        app:layout_constraintBottom_toTopOf="@+id/CenterButton"
+        app:layout_constraintEnd_toStartOf="@+id/RightTrimImageView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

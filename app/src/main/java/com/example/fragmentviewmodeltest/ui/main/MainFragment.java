@@ -12,7 +12,6 @@ import android.graphics.Paint;
 import android.graphics.Rect;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,9 +32,15 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.example.fragmentviewmodeltest.R;
 
 import com.example.fragmentviewmodeltest.MainActivity;
-import com.example.fragmentviewmodeltest.R;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,7 +56,7 @@ import lombok.SneakyThrows;
 @Setter
 public class MainFragment extends Fragment
 {
-    private String VersionID = "1.06a";
+    private String VersionID = "1.08";
 
     private MainViewModel mViewModel;
     private Button mPairedDevicesButton;
@@ -70,6 +75,13 @@ public class MainFragment extends Fragment
     private TextView mMessage;
     private TextView mVersionID;
     private Switch mManualSwitch;
+    private ImageView mTrimUpImageView;
+    private ImageView mTrimDownImageView;
+    private TextView mTrimSpeedValue;
+    private ImageView mTrimLeftImageView;
+    private ImageView mTrimRightImageView;
+    private TextView mTrimAngleValue;
+
 
 
 
@@ -78,6 +90,8 @@ public class MainFragment extends Fragment
     private int MessageCounter = 0;
     private int OrientationModeSpeedValue = 0;
     private int OrientationModeAngleValue = 90;
+    private int SpeedTrim = 0;
+    private int AngleTrim = 0;
 
     private boolean SocketOpened = false;
 
@@ -119,6 +133,7 @@ public class MainFragment extends Fragment
 
     private SensorManager sensorManager;
 
+    @SneakyThrows
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -141,6 +156,20 @@ public class MainFragment extends Fragment
         mStopButton = root.findViewById(R.id.StopButton);
         mCenterButton = root.findViewById(R.id.CenterButton);
         mManualSwitch = root.findViewById(R.id.Manualswitch);
+        mTrimDownImageView = root.findViewById(R.id.TrimDownImageView);
+        mTrimUpImageView = root.findViewById(R.id.TrimUpImageView);
+        mTrimSpeedValue = root.findViewById(R.id.SpeedTrimTextView);
+        mTrimLeftImageView = root.findViewById(R.id.LeftTrimImageView);
+        mTrimRightImageView = root.findViewById(R.id.RightTrimImageView);
+        mTrimAngleValue = root.findViewById(R.id.AngleTrimTextView);
+        //TODO: Trim logic only affects manual mode
+
+
+        mTrimUpImageView.setColorFilter(Color.rgb(255,165,0));
+        mTrimDownImageView.setColorFilter(Color.rgb(255,165,0));
+
+        mTrimLeftImageView.setColorFilter(Color.rgb(255,165,0));
+        mTrimRightImageView.setColorFilter(Color.rgb(255,165,0));
 
         //Example for Direct drawing on the display
 //        relativeLayout = (RelativeLayout) root.findViewById(R.id.RLayout);
@@ -157,6 +186,8 @@ public class MainFragment extends Fragment
         MainFragment.getInstance().setMAngleValue((TextView) root.findViewById(R.id.AngleValueTextView));
         MainFragment.getInstance().setMSpeedValue((TextView) root.findViewById(R.id.SpeedValueTextView));
         MainFragment.getInstance().setMMessage((TextView) root.findViewById(R.id.messageTextView));
+        MainFragment.getInstance().setMTrimSpeedValue(mTrimSpeedValue);
+        MainFragment.getInstance().setMTrimAngleValue(mTrimAngleValue);
         MainFragment.getInstance().setSocketOpened(false);
 
         MainFragment.getInstance().setMDeviceListView((ListView) root.findViewById(R.id.DevicesListView));
@@ -175,6 +206,68 @@ public class MainFragment extends Fragment
 //        mDeviceListView.setVisibility(View.VISIBLE);
         MainFragment.getInstance().getMDeviceListView().setAdapter(mBTArrayAdapter);
         MainFragment.getInstance().getMDeviceListView().setVisibility(View.VISIBLE);
+
+//        Context context = root.getContext().getApplicationContext();
+//        InputStream istream = context.getResources().openRawResource(R.xml.trims2.xml);
+//
+//        Resources res = getResources();
+//        XmlResourceParser xrp = res.getXml(R.xml.trims2.xml);
+
+        InputStream is = root.getContext().getAssets().open("trims.xml");
+
+        DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+        Document doc = dBuilder.parse(is);
+        //NodeList nList = doc.getElementsByTagName("Throttle");
+
+        Element element=doc.getDocumentElement();
+        element.normalize();
+
+        AngleTrim = Integer.parseInt(element.getElementsByTagName("Heading").item(0).getTextContent());
+        SpeedTrim = Integer.parseInt(element.getElementsByTagName("Throttle").item(0).getTextContent());
+
+//        File file = new File("NewDom.xml");
+////        if(!file.exists())
+////        {
+////            file.createNewFile();
+////            // write code for saving data to the file
+////        }
+
+//        FileInputStream fis = root.getContext().openFileInput("NewDom.xml");
+//
+//        String filename = "NewDom.xml";
+//        String string = "Hello world!";
+//        FileOutputStream outputStream;
+//
+//        try {
+//            outputStream = root.getContext().openFileOutput(filename, Context.MODE_PRIVATE);
+//            outputStream.write(string.getBytes());
+//            outputStream.close();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//        //for output to file, console
+//        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+//        Transformer transformer = transformerFactory.newTransformer();
+//        //for pretty print
+//        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+//        DOMSource source = new DOMSource(doc);
+//
+//        FileOutputStream _stream=root.getContext().openFileOutput("NewDom.xml", root.getContext().MODE_APPEND);
+//        StreamResult result=new StreamResult(_stream);
+//
+////        StreamResult file = new StreamResult(new File("test.xml"));
+//
+//        //write data
+//
+//        transformer.transform(source, result);
+
+
+
+
+        //readFeed(xrp);
+
 
 
         mPairedDevicesButton.setOnClickListener(new View.OnClickListener()
@@ -247,6 +340,49 @@ public class MainFragment extends Fragment
             }
         });
 
+        mTrimUpImageView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                //SpeedTrim +=SpeedTrim +1;
+                MainFragment.getInstance().setSpeedTrim(MainFragment.getInstance().getSpeedTrim() + 1);
+                MainFragment.getInstance().getMTrimSpeedValue().setText(Integer.toString(MainFragment.getInstance().getSpeedTrim()));
+            }
+        });
+
+        mTrimDownImageView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+//                SpeedTrim +=SpeedTrim -1;
+                MainFragment.getInstance().setSpeedTrim(MainFragment.getInstance().getSpeedTrim() - 1);
+                MainFragment.getInstance().getMTrimSpeedValue().setText(Integer.toString(MainFragment.getInstance().getSpeedTrim()));
+            }
+        });
+
+        mTrimLeftImageView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                //SpeedTrim +=SpeedTrim +1;
+                MainFragment.getInstance().setAngleTrim(MainFragment.getInstance().getAngleTrim()-1);
+                MainFragment.getInstance().getMTrimAngleValue().setText(Integer.toString(MainFragment.getInstance().getAngleTrim()));
+            }
+        });
+
+        mTrimRightImageView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+//                SpeedTrim +=SpeedTrim -1;
+                MainFragment.getInstance().setAngleTrim(MainFragment.getInstance().getAngleTrim()+1);
+                MainFragment.getInstance().getMTrimAngleValue().setText(Integer.toString(MainFragment.getInstance().getAngleTrim()));
+            }
+        });
 //        mManualSwitch.setOnCheckedChangeListener(new View.OnClickListener()
 //        {
 //            @Override
@@ -554,11 +690,11 @@ public class MainFragment extends Fragment
             // Do something here on the main thread
             if (IsManualMode)
             {
-                MainFragment.getInstance().getMAngleValue().setText(Integer.toString(MainFragment.getInstance().getAngleValue()));
-                MainFragment.getInstance().getMSpeedValue().setText(Integer.toString(MainFragment.getInstance().getSpeedValue()));
+                MainFragment.getInstance().getMAngleValue().setText(Integer.toString(MainFragment.getInstance().getAngleValue() + MainFragment.getInstance().getAngleTrim() ));
+                MainFragment.getInstance().getMSpeedValue().setText(Integer.toString(MainFragment.getInstance().getSpeedValue() + MainFragment.getInstance().getSpeedTrim()));
             }
 //            MessageToSend = "#" + SticksMessageHeader + Integer.toString(MainFragment.getInstance().getSpeedValue()) + "," + Integer.toString(MainFragment.getInstance().getAngleValue()) + "~\r\n";
-            String MessageBody = "#" + Integer.toString(MainFragment.getInstance().getSpeedValue()) + "," + Integer.toString(MainFragment.getInstance().getAngleValue()) + "!~";
+            String MessageBody = "#" + (MainFragment.getInstance().getSpeedValue()) + "," + (MainFragment.getInstance().getAngleValue()) + "!~";
             MainFragment.getInstance().setMessageCounter(MainFragment.getInstance().getMessageCounter()+1);
             MessageToSend = SticksMessageHeader + MessageBody.length() + "," + MainFragment.getInstance().getMessageCounter() + "," + MessageBody;
             if ( !(MainFragment.getInstance().isSocketOpened()) )
